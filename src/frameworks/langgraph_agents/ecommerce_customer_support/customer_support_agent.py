@@ -10,7 +10,7 @@ import operator
 import builtins
 from typing import Annotated, Sequence, TypedDict, Optional
 
-from langchain_openai.chat_models import ChatOpenAI
+from src.common.llm import get_llm
 from langchain.schema import AIMessage, BaseMessage, HumanMessage, SystemMessage
 from langchain_core.messages.tool import ToolMessage
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
@@ -57,8 +57,8 @@ def update_address_for_order(order_id: str, shipping_address: dict) -> str:
 TOOLS = [send_customer_message, issue_refund, cancel_order, update_address_for_order]
 
 Traceloop.init(disable_batch=True, app_name="customer_support_agent")
-llm = ChatOpenAI(model="gpt-4o", temperature=0.0, callbacks=[StreamingStdOutCallbackHandler()],  
-    verbose=True).bind_tools(TOOLS)
+# APIキーがなければダミーLLM、あればOpenAI/Claudeを使う（src/common/llm.py 参照）
+llm = get_llm().bind_tools(TOOLS)
 
 class AgentState(TypedDict):
     order: Optional[dict]  # Make order optional

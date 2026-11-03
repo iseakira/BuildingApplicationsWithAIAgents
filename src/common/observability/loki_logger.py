@@ -11,7 +11,11 @@ def log_to_loki(label: str, message: str):
             "values": [[str(int(time.time() * 1e9)), message]]
         }]
     }
-    response = requests.post(url, data=json.dumps(log_entry), headers=headers)
+    try:
+        response = requests.post(url, data=json.dumps(log_entry), headers=headers, timeout=2)
+    except requests.exceptions.RequestException:
+        # Loki が起動していない（10章より前）ときは、ログ送信を飛ばして処理を続ける
+        return
     print("Status:", response.status_code)
     print("Response:", response.text)
 

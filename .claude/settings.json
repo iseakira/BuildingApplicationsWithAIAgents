@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(unset OPENAI_API_KEY ANTHROPIC_API_KEY)",
+      "Bash(.venv/Scripts/python -W ignore -m src.frameworks.langgraph_agents.ecommerce_customer_support.customer_support_agent)",
+      "Bash(.venv/Scripts/python -m pytest tests/frameworks -q -p no:warnings)",
+      "Bash(.venv/Scripts/python -c ' *)"
+    ]
+  }
+}
